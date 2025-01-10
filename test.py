@@ -33,23 +33,25 @@ def matrix_operation_manual(M, X, B):
 
 # Endpoint: /calculate
 @app.post("/calculate")
-def calculate():
-    # Initialize X as a 5x1 matrix
-    X = np.array([[1], [2], [3], [4], [5]])
+async def calculate(data: dict):
+    # Get input matrix from request data
+    try:
+        X = np.array(data["matrix"]).reshape(5, 1)
 
-    # Compute using NumPy
-    numpy_result = matrix_operation_numpy(M, X, B)
-    numpy_sigmoid_result = sigmoid(numpy_result).tolist()
+        # Compute using NumPy
+        numpy_result = matrix_operation_numpy(M, X, B)
+        numpy_sigmoid_result = sigmoid(numpy_result).tolist()
 
+        # Compute without NumPy
+        manual_result = matrix_operation_manual(M.tolist(), X.tolist(), B.tolist())
+        manual_sigmoid_result = [[sigmoid(value[0])] for value in manual_result]
 
-# Compute without NumPy
-    manual_result = matrix_operation_manual(M.tolist(), X.tolist(), B.tolist())
-    manual_sigmoid_result = [[sigmoid(value[0])] for value in manual_result]
-
-    return {
-        "result_with_numpy": numpy_sigmoid_result,
-        "result_without_numpy": manual_sigmoid_result
-    }
+        return {
+            "result_with_numpy": numpy_sigmoid_result,
+            "result_without_numpy": manual_sigmoid_result
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 
 if __name__ == "__main__":
