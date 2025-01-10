@@ -47,7 +47,7 @@ def calculate():
     numpy_sigmoid_result = sigmoid(numpy_result).tolist()
 
 
-# Compute without NumPy
+# Compute without NumPy Library
     manual_result = matrix_operation_manual(M.tolist(), X.tolist(), B.tolist())
     manual_sigmoid_result = [[sigmoid(value[0])] for value in manual_result]
 
