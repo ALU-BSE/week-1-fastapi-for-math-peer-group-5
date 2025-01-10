@@ -72,8 +72,3 @@ async def calculate(input_data: MatrixInput):
 if __name__ == "__main__":
     uvicorn.run(app)
 
-'''
-    Create a requirements.txt
-    Upload to render
-'''
-
