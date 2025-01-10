@@ -1,8 +1,19 @@
 from fastapi import FastAPI
-import uvicorn 
-import numpy as np 
+from pydantic import BaseModel
+import numpy as np
+from typing import List
+import math
 
 app = FastAPI()
+
+class MatrixInput(BaseModel):
+    matrix: List[List[float]]
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+
 
 # use the post decorator directly below this
 '''
