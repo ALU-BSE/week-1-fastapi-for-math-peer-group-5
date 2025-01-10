@@ -12,7 +12,20 @@ class MatrixInput(BaseModel):
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+# Matrix multiplication function (with NumPy)
+def matrix_multiply_with_numpy(M, X):
+    M = np.array(M)
+    X = np.array(X)
+    return np.dot(M, X)
 
+# Matrix multiplication function (without NumPy)
+def matrix_multiply_without_numpy(M, X):
+    result = [[0 for _ in range(len(X[0]))] for _ in range(len(M))]
+    for i in range(len(M)):
+        for j in range(len(X[0])):
+            for k in range(len(X)):
+                result[i][j] += M[i][k] * X[k][j]
+    return result
 
 
 # use the post decorator directly below this
