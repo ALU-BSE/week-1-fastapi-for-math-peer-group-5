@@ -27,6 +27,14 @@ def matrix_multiply_without_numpy(M, X):
                 result[i][j] += M[i][k] * X[k][j]
     return result
 
+# Sigmoid function (element-wise)
+def sigmoid(x):
+    # If input is a list, apply sigmoid element-wise
+    if isinstance(x, list):
+        return [[1 / (1 + math.exp(-cell)) for cell in row] for row in x]
+    # If input is a numpy array, apply sigmoid element-wise
+    return 1 / (1 + np.exp(-x))
+
 
 # use the post decorator directly below this
 '''
