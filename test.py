@@ -35,52 +35,37 @@ def sigmoid(x):
     # If input is a numpy array, apply sigmoid element-wise
     return 1 / (1 + np.exp(-x))
 
-
-# use the post decorator directly below this
-'''
-    Initialize M and B as np arrays
-'''
-M = np.array([[1, 2, 3, 4, 5],
-              [5, 4, 3, 2, 1],
-              [2, 2, 2, 2, 2],
-              [3, 3, 3, 3, 3],
-              [4, 4, 4, 4, 4]])
-
-B = np.array([[1], [1], [1], [1], [1]])
-
-
-# Sigmoid function
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-# Formula: MX + B using NumPy
-def matrix_operation_numpy(M, X, B):
-    return np.dot(M, X) + B
-
-# Formula: MX + B without NumPy
-def matrix_operation_manual(M, X, B):
-    result = [[sum(a * b for a, b in zip(M_row, X_col)) for X_col in zip(*X)] for M_row in M]
-    result = [[result[i][0] + B[i][0]] for i in range(len(result))]
-    return result
-
 # Endpoint: /calculate
 @app.post("/calculate")
-def calculate():
-    # Initialize X as a 5x1 matrix
-    X = np.array([[1], [2], [3], [4], [5]])
+async def calculate(input_data: MatrixInput):
+    # Matrix M (5x5) - example matrix
+    M = [[1, 2, 3, 4, 5],
+         [6, 7, 8, 9, 10],
+         [11, 12, 13, 14, 15],
+         [16, 17, 18, 19, 20],
+         [21, 22, 23, 24, 25]]
 
-    # Compute using NumPy
-    numpy_result = matrix_operation_numpy(M, X, B)
-    numpy_sigmoid_result = sigmoid(numpy_result).tolist()
+    # Matrix X (5x1) from the user's input data
+    X = input_data.matrix
+    
+    # Bias vector B (5x1) - example bias
+    B = [1, 1, 1, 1, 1]
 
+    # Perform matrix multiplication and add bias (with NumPy)
+    result_with_numpy = matrix_multiply_with_numpy(M, X) + B
+    # Apply sigmoid function
+    result_with_numpy = sigmoid(result_with_numpy)
 
-# Compute without NumPy
-    manual_result = matrix_operation_manual(M.tolist(), X.tolist(), B.tolist())
-    manual_sigmoid_result = [[sigmoid(value[0])] for value in manual_result]
+    # Perform matrix multiplication and add bias (without NumPy)
+    result_without_numpy = matrix_multiply_without_numpy(M, X)
+    result_without_numpy = [[result_without_numpy[i][j] + B[i] for j in range(len(result_without_numpy[i]))] for i in range(len(result_without_numpy))] 
+    # Apply sigmoid function
+    result_without_numpy = sigmoid(result_without_numpy)
 
+    # Return the results
     return {
-        "result_with_numpy": numpy_sigmoid_result,
-        "result_without_numpy": manual_sigmoid_result
+        "result_with_numpy": result_with_numpy.tolist(),
+        "result_without_numpy": result_without_numpy
     }
 
 
