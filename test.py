@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import numpy as np
 from typing import List
 import math
+import uvicorn
 
 app = FastAPI()
 
